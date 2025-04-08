@@ -19,9 +19,9 @@ const env=Env.PRODUCTION // for testing
 
 const client=StandardCheckoutClient.getInstance(clientId,clientSecret,clientVersion,env)
 console.log(client);
-app.get('/h',async ()=>{
+app.get('/h',async (req,res)=>{
     console.log("hello")
-   
+   return res.send("hello");
 })
 app.post('/create-checkout',async (req,res)=>{
     try{
