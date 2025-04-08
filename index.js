@@ -25,7 +25,7 @@ app.get('/h',async (req,res)=>{
 })
 app.post('/create-checkout',async (req,res)=>{
     try{
-
+            console.log("RUNNING PHONE PE---------")
         // console.log(req.body);
         const {
             MUID,
