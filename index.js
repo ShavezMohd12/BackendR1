@@ -44,7 +44,7 @@ app.post('/create-checkout',async (req,res)=>{
 
         const merchantOrderId=transactionID;
         
-        const redirectUrl=`http://localhost:8000/check-status?merchantOrderId=${merchantOrderId}` 
+        const redirectUrl=`https://backendr1.onrender.com/check-status?merchantOrderId=${merchantOrderId}` 
 
         const request=StandardCheckoutPayRequest.builder()
         .merchantOrderId(merchantOrderId)
@@ -92,10 +92,10 @@ merchantOrderId
       const status=response.state
       if(status==="COMPLETED")
       {
-       return res.redirect("http://localhost:3000/#/payment/success")
+       return res.redirect("https://nextgen-project/#/payment/success")
       }
       else{
-        return res.redirect("http://localhost:3000/#/payment/failed");
+        return res.redirect("https://nextgen-project/#/payment/failed");
       }
 
 
