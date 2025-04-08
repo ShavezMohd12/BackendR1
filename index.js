@@ -92,10 +92,10 @@ merchantOrderId
       const status=response.state
       if(status==="COMPLETED")
       {
-       return res.redirect("https://nextgen-project/#/payment/success")
+       return res.redirect("https://nextgen-project.tech/#/payment/success")
       }
       else{
-        return res.redirect("https://nextgen-project/#/payment/failed");
+        return res.redirect("https://nextgen-project.tech/#/payment/failed");
       }
 
 
