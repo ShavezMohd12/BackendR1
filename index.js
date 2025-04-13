@@ -80,7 +80,7 @@ app.post('/deposit',async (req,res)=>{
             MUID,
             price,
             name,
-
+            id,
             transactionID
 
         }=req.body
@@ -92,7 +92,7 @@ app.post('/deposit',async (req,res)=>{
 
         const merchantOrderId=transactionID;
         
-        const redirectUrl=`https://backendr1.onrender.com/deposit-status?merchantOrderId=${merchantOrderId}` 
+        const redirectUrl=`https://backendr1.onrender.com/deposit-status?merchantOrderId=${merchantOrderId}&price=${price}&id=${id}` 
 
         const request=StandardCheckoutPayRequest.builder()
         .merchantOrderId(merchantOrderId)
@@ -160,7 +160,9 @@ app.get('/deposit-status',async (req,res)=>{
     try {
 
       const  {
-merchantOrderId
+merchantOrderId,
+price,
+id
         }=req.query;
         if(!merchantOrderId)
         {
@@ -174,7 +176,7 @@ merchantOrderId
       const status=response.state
       if(status==="COMPLETED")
       {
-       return res.redirect("https://nextgen-project.tech/#/deposit/success")
+       return res.redirect(`https://nextgen-project.tech/#/deposit/success?amount=${price}&id=${id}`)
       }
       else{
         return res.redirect("https://nextgen-project.tech/#/deposit/failed");
