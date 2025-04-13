@@ -72,6 +72,54 @@ app.post('/create-checkout',async (req,res)=>{
         res.status(500).send("error creating order")
     }
 })
+app.post('/deposit',async (req,res)=>{
+    try{
+            console.log("RUNNING PHONE PE for deposit amount---------")
+        // console.log(req.body);
+        const {
+            MUID,
+            price,
+            name,
+
+            transactionID
+
+        }=req.body
+        // console.log("-->"+req.body)
+        if(!price)
+        {
+            return res.status(400).send("amount is required");
+        }
+
+        const merchantOrderId=transactionID;
+        
+        const redirectUrl=`https://backendr1.onrender.com/deposit-status?merchantOrderId=${merchantOrderId}` 
+
+        const request=StandardCheckoutPayRequest.builder()
+        .merchantOrderId(merchantOrderId)
+        .amount(price*100)
+        .expireAfter(1200)
+        .message("Requesting Payment")
+        .metaInfo({udf1:`amount deposited by-${name}`})
+        .redirectUrl(redirectUrl)
+        .build();
+        console.log(request);
+
+      const response=await client.pay(request);
+
+        console.log(response);
+        return res.json({
+            checkoutPageUrl:response.redirectUrl
+        })
+    // return res.json(req.body);
+
+    }
+
+    catch(error)
+    {
+        console.log("error creating order "+error)
+        res.status(500).send("error creating order")
+    }
+})
 
 app.get('/check-status',async (req,res)=>{
 
@@ -105,6 +153,42 @@ merchantOrderId
     }
    
 })
+
+
+app.get('/deposit-status',async (req,res)=>{
+
+    try {
+
+      const  {
+merchantOrderId
+        }=req.query;
+        if(!merchantOrderId)
+        {
+            return res.status(400).send("Order Id not present");
+        }
+
+
+
+      const response=await client.getOrderStatus(merchantOrderId);
+
+      const status=response.state
+      if(status==="COMPLETED")
+      {
+       return res.redirect("https://nextgen-project.tech/#/deposit/success")
+      }
+      else{
+        return res.redirect("https://nextgen-project.tech/#/deposit/failed");
+      }
+
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send("ERROR");
+    }
+   
+})
+
+
 
 app.listen(8000,()=>{
     console.log("Server is running on port 8000");
