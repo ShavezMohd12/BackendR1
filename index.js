@@ -4,6 +4,7 @@ import {randomUUID} from "crypto";
 import dotenv from "dotenv";
 import axios from 'axios';
 import { StandardCheckoutClient,StandardCheckoutPayRequest,StandardCheckoutPayResponse,Env } from "pg-sdk-node";
+const crypto = require('crypto');
 
 dotenv.config();
 const app=express();
@@ -208,9 +209,29 @@ id
              alert(error);
              console.error('Error updating deposit status:', error);
          }
-     
-       return res.redirect(`https://nextgen-project.tech/#/deposit/success`)
-      }
+
+
+         
+    const algorithm = 'aes-256-cbc';
+    const key = crypto.randomBytes(32);
+    const iv = crypto.randomBytes(16);
+
+    function encrypt(text) {
+        const cipher = crypto.createCipheriv(algorithm, key, iv);
+        let encrypted = cipher.update(text, 'utf8', 'hex');
+        encrypted += cipher.final('hex');
+        return { encryptedData: encrypted, iv: iv.toString('hex'), key: key.toString('hex') };
+    }
+    // Example usage
+    const encrypted = encrypt(Number(price+id).toString());
+    console.log('Encrypted:', encrypted);
+
+       
+       return res.redirect(`https://nextgen-project.tech/#/deposit/success?` + 
+    `data=${encodeURIComponent(encrypted.encryptedData)}&` +
+    `iv=${encodeURIComponent(encrypted.iv)}&` +
+    `key=${encodeURIComponent(encrypted.key)
+      }`)}
       else{
         return res.redirect("https://nextgen-project.tech/#/deposit/failed");
       }
