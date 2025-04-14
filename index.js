@@ -183,7 +183,7 @@ id
             {
              axios.get(`${process.env.REACT_APP_API_URL}/${id}`).then(resp => {
                  console.log(resp.data.wallet);
-                amt=Number(resp.data.wallet)+Number(amount);
+                amt=Number(resp.data.wallet)+Number(price);
              }).catch(error=>{
                  console.log(error);
              });
