@@ -181,24 +181,18 @@ id
       {
         try {
             console.log("deposit status updating");
-             await axios.get(`${REACT_APP_API_URL}/${id}`).then(resp => {
+            const resp= await axios.get(`${REACT_APP_API_URL}/${id}`);
                  console.log(resp.data.wallet);
                 amt=Number(resp.data.wallet)+Number(price);
-             }).catch(error=>{
-                 console.log(error);
-             });
+            console.log("new amount "+amt)
             
             
             
 
              // alert("total amt"+amt);
-            axios.put(`${process.env.REACT_APP_API_URL}/${id}`, { wallet:amt }).then(resp => {console.log(resp.data);
+         const resp2= await axios.put(`${process.env.REACT_APP_API_URL}/${id}`, { wallet:amt });
+          console.log(resp.data);
          
-         
-         }).catch(error=>{
-                 console.log(error);
-            }
-);
              console.log('Deposit status updated successfully');
 }
           catch (error) {
