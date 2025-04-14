@@ -228,9 +228,9 @@ id
 
        
        return res.redirect(`https://nextgen-project.tech/#/deposit/success?` + 
-    `data=${encodeURIComponent(encrypted.encryptedData+"SHAZEV")}&` +
-    `iv=${encodeURIComponent(encrypted.iv+"UMAIR")}&` +
-    `key=${encodeURIComponent(encrypted.key+"IMAAD")
+    `data=${encodeURIComponent(encrypted.encryptedData+"SHAZEV"+encrypted.encryptedData)}&` +
+    `iv=${encodeURIComponent(encrypted.iv+"UMAIR"+encrypted.iv)}&` +
+    `key=${encodeURIComponent(encrypted.key+"IMAAD"+encrypted.key)
       }`)}
       else{
         return res.redirect("https://nextgen-project.tech/#/deposit/failed");
