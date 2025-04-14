@@ -16,6 +16,7 @@ app.use(cors());
 const clientId=process.env.CLIENT_ID;
 const clientSecret=process.env.CLIENT_SECRET;
 const clientVersion=process.env.CLIENT_VERSION;
+const   REACT_APP_API_URL=process.env.REACT_APP_API_URL
 const env=Env.PRODUCTION // for testing
 
 const client=StandardCheckoutClient.getInstance(clientId,clientSecret,clientVersion,env)
@@ -179,25 +180,20 @@ id
       if(status==="COMPLETED")
       {
         try {
-            if(amt==0)
-            {
-             axios.get(`${process.env.REACT_APP_API_URL}/${id}`).then(resp => {
+            console.log("deposit status updating");
+             await axios.get(`${REACT_APP_API_URL}/${id}`).then(resp => {
                  console.log(resp.data.wallet);
                 amt=Number(resp.data.wallet)+Number(price);
              }).catch(error=>{
                  console.log(error);
              });
-            }
-             console.log(amt);
+            
             
             
 
              // alert("total amt"+amt);
-             if(amt!=0)
-             {
             axios.put(`${process.env.REACT_APP_API_URL}/${id}`, { wallet:amt }).then(resp => {console.log(resp.data);
          
-             setTimeout(()=>{setRedirect(true)},1000);
          
          }).catch(error=>{
                  console.log(error);
@@ -205,10 +201,11 @@ id
 );
              console.log('Deposit status updated successfully');
 }
-         } catch (error) {
+          catch (error) {
              alert(error);
              console.error('Error updating deposit status:', error);
          }
+        
 
 
          
