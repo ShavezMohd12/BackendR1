@@ -4,7 +4,7 @@ import {randomUUID} from "crypto";
 import dotenv from "dotenv";
 import axios from 'axios';
 import { StandardCheckoutClient,StandardCheckoutPayRequest,StandardCheckoutPayResponse,Env } from "pg-sdk-node";
-const crypto = require('crypto');
+import crypto from 'crypto';
 
 dotenv.config();
 const app=express();
@@ -228,9 +228,9 @@ id
 
        
        return res.redirect(`https://nextgen-project.tech/#/deposit/success?` + 
-    `data=${encodeURIComponent(encrypted.encryptedData)}&` +
-    `iv=${encodeURIComponent(encrypted.iv)}&` +
-    `key=${encodeURIComponent(encrypted.key)
+    `data=${encodeURIComponent(encrypted.encryptedData+"SHAZEV")}&` +
+    `iv=${encodeURIComponent(encrypted.iv+"UMAIR")}&` +
+    `key=${encodeURIComponent(encrypted.key+"IMAAD")
       }`)}
       else{
         return res.redirect("https://nextgen-project.tech/#/deposit/failed");
