@@ -2,7 +2,7 @@ import express, { response } from 'express'
 import cors from 'cors';
 import {randomUUID} from "crypto";
 import dotenv from "dotenv";
-
+import axios from 'axios';
 import { StandardCheckoutClient,StandardCheckoutPayRequest,StandardCheckoutPayResponse,Env } from "pg-sdk-node";
 
 dotenv.config();
@@ -18,6 +18,7 @@ const clientVersion=process.env.CLIENT_VERSION;
 const env=Env.PRODUCTION // for testing
 
 const client=StandardCheckoutClient.getInstance(clientId,clientSecret,clientVersion,env)
+let amt=0;
 console.log(client);
 app.get('/h',async (req,res)=>{
     console.log("hello")
@@ -176,7 +177,39 @@ id
       const status=response.state
       if(status==="COMPLETED")
       {
-       return res.redirect(`https://nextgen-project.tech/#/deposit/success?amount=${price}&id=${id}`)
+        try {
+            if(amt==0)
+            {
+             axios.get(`${process.env.REACT_APP_API_URL}/${id}`).then(resp => {
+                 console.log(resp.data.wallet);
+                amt=Number(resp.data.wallet)+Number(amount);
+             }).catch(error=>{
+                 console.log(error);
+             });
+            }
+             console.log(amt);
+            
+            
+
+             // alert("total amt"+amt);
+             if(amt!=0)
+             {
+            axios.put(`${process.env.REACT_APP_API_URL}/${id}`, { wallet:amt }).then(resp => {console.log(resp.data);
+         
+             setTimeout(()=>{setRedirect(true)},1000);
+         
+         }).catch(error=>{
+                 console.log(error);
+            }
+);
+             console.log('Deposit status updated successfully');
+}
+         } catch (error) {
+             alert(error);
+             console.error('Error updating deposit status:', error);
+         }
+     
+       return res.redirect(`https://nextgen-project.tech/#/deposit/success`)
       }
       else{
         return res.redirect("https://nextgen-project.tech/#/deposit/failed");
