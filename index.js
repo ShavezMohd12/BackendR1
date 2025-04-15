@@ -22,10 +22,13 @@ const env=Env.PRODUCTION // for testing
 const client=StandardCheckoutClient.getInstance(clientId,clientSecret,clientVersion,env)
 let amt=0;
 console.log(client);
-app.get('/h',async (req,res)=>{
-    console.log("hello")
-   return res.send("hello");
+app.get('/awake',async (req,res)=>{
+    
+   return res.send("alive");
 })
+
+setInterval(()=>{axios.get("https://backendr1.onrender.com/awake").then(rep=>{console.log(rep.data)})},40000);
+
 app.post('/create-checkout',async (req,res)=>{
     try{
             console.log("RUNNING PHONE PE---------")
